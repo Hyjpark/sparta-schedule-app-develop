@@ -3,6 +3,7 @@ package org.example.scheduleapiv2.schedule.service;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
 import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
+import org.example.scheduleapiv2.schedule.dto.ScheduleUpdateRequest;
 import org.example.scheduleapiv2.schedule.entity.Schedule;
 import org.example.scheduleapiv2.schedule.repository.ScheduleRepository;
 import org.springframework.http.HttpStatus;
@@ -37,9 +38,18 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponse findScheduleById(Long scheduleId) {
-        Schedule findSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
 
-        return ScheduleResponse.of(findSchedule);
+        return ScheduleResponse.of(schedule);
+    }
+
+    @Transactional
+    public ScheduleResponse updateSchedule(Long scheduleId, ScheduleUpdateRequest request) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
+        schedule.updateTitleAndContents(request.getTitle(), request.getContents());
+
+        return ScheduleResponse.of(schedule);
     }
 }
