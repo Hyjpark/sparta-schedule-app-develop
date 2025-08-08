@@ -38,16 +38,14 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponse findScheduleById(Long scheduleId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
+        Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
 
         return ScheduleResponse.of(schedule);
     }
 
     @Transactional
     public ScheduleResponse updateSchedule(Long scheduleId, ScheduleUpdateRequest request) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
+        Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
         schedule.updateTitleAndContents(request.getTitle(), request.getContents());
 
         return ScheduleResponse.of(schedule);
@@ -55,8 +53,7 @@ public class ScheduleService {
 
     @Transactional
     public void deleteSchedule(Long scheduleId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
+        Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
         scheduleRepository.delete(schedule);
     }
 }
