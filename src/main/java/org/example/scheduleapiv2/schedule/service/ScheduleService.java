@@ -52,4 +52,11 @@ public class ScheduleService {
 
         return ScheduleResponse.of(schedule);
     }
+
+    @Transactional
+    public void deleteSchedule(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
+        scheduleRepository.delete(schedule);
+    }
 }

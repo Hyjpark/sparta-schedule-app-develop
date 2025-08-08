@@ -37,4 +37,10 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponse> updateSchedule(@PathVariable("scheduleId") Long scheduleId, @RequestBody ScheduleUpdateRequest request) {
         return new ResponseEntity<>(scheduleService.updateSchedule(scheduleId, request), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable("scheduleId") Long scheduleId) {
+        scheduleService.deleteSchedule(scheduleId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
