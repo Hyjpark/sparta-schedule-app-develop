@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.scheduleapiv2.common.entity.BaseEntity;
 
 @Getter
 @Entity
