@@ -1,12 +1,10 @@
 package org.example.scheduleapiv2.schedule.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.scheduleapiv2.common.entity.BaseEntity;
+import org.example.scheduleapiv2.user.entity.User;
 
 @Getter
 @Entity
@@ -17,12 +15,15 @@ public class Schedule extends BaseEntity {
     private Long id;
     private String title;
     private String contents;
-    private String author;
 
-    public Schedule(String title, String contents, String author) {
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Schedule(String title, String contents, User user) {
         this.title = title;
         this.contents = contents;
-        this.author = author;
+        this.user = user;
     }
 
     public void updateTitleAndContents(String title, String contents) {

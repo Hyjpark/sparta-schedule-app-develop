@@ -2,6 +2,7 @@ package org.example.scheduleapiv2.schedule.dto;
 
 import lombok.Getter;
 import org.example.scheduleapiv2.schedule.entity.Schedule;
+import org.example.scheduleapiv2.user.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -11,15 +12,15 @@ public class ScheduleResponse {
     private final Long id;
     private final String title;
     private final String contents;
-    private final String author;
+    private final Long userId;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public ScheduleResponse(Long id, String title, String contents, String author, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public ScheduleResponse(Long id, String title, String contents, User user, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.title = title;
         this.contents = contents;
-        this.author = author;
+        this.userId = user.getId();
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
@@ -29,7 +30,7 @@ public class ScheduleResponse {
                 schedule.getId(),
                 schedule.getTitle(),
                 schedule.getContents(),
-                schedule.getAuthor(),
+                schedule.getUser(),
                 schedule.getCreatedAt(),
                 schedule.getModifiedAt()
         );
