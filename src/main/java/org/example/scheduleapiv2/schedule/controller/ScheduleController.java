@@ -1,0 +1,25 @@
+package org.example.scheduleapiv2.schedule.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
+import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
+import org.example.scheduleapiv2.schedule.service.ScheduleService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/schedules")
+@RequiredArgsConstructor
+public class ScheduleController {
+
+    private final ScheduleService scheduleService;
+
+    @PostMapping
+    public ResponseEntity<ScheduleResponse> createSchedule(@RequestBody ScheduleCreateRequest request) {
+        return new ResponseEntity<>(scheduleService.createSchedule(request), HttpStatus.CREATED);
+    }
+}
