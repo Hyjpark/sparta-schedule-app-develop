@@ -7,6 +7,7 @@ import org.example.scheduleapiv2.schedule.entity.Schedule;
 import org.example.scheduleapiv2.schedule.repository.ScheduleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
+    @Transactional
     public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
 
         Schedule schedule = new Schedule(request.getTitle(), request.getContents(), request.getAuthor());
@@ -26,12 +28,14 @@ public class ScheduleService {
         return ScheduleResponse.of(savedSchedule);
     }
 
+    @Transactional(readOnly = true)
     public List<ScheduleResponse> findAllSchedules() {
         return scheduleRepository.findAll().stream()
                 .map(ScheduleResponse::of)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public ScheduleResponse findScheduleById(Long scheduleId) {
         Schedule findSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
