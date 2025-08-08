@@ -5,7 +5,9 @@ import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
 import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
 import org.example.scheduleapiv2.schedule.entity.Schedule;
 import org.example.scheduleapiv2.schedule.repository.ScheduleRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,5 +30,12 @@ public class ScheduleService {
         return scheduleRepository.findAll().stream()
                 .map(ScheduleResponse::of)
                 .toList();
+    }
+
+    public ScheduleResponse findScheduleById(Long scheduleId) {
+        Schedule findSchedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
+
+        return ScheduleResponse.of(findSchedule);
     }
 }

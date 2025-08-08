@@ -26,4 +26,9 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleResponse>> findAllSchedules() {
         return new ResponseEntity<>(scheduleService.findAllSchedules(), HttpStatus.OK);
     }
+
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponse> findScheduleById(@PathVariable("scheduleId") Long scheduleId) {
+        return new ResponseEntity<>(scheduleService.findScheduleById(scheduleId), HttpStatus.OK);
+    }
 }
