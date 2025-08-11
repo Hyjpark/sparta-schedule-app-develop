@@ -1,10 +1,15 @@
 package org.example.scheduleapiv2.schedule.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
 import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
 import org.example.scheduleapiv2.schedule.dto.ScheduleUpdateRequest;
 import org.example.scheduleapiv2.schedule.service.ScheduleService;
+import org.example.scheduleapiv2.user.entity.User;
+import org.example.scheduleapiv2.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +24,10 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<ScheduleResponse> createSchedule(@RequestBody ScheduleCreateRequest request) {
-        return new ResponseEntity<>(scheduleService.createSchedule(request), HttpStatus.CREATED);
+    public ResponseEntity<ScheduleResponse> createSchedule(@RequestBody ScheduleCreateRequest request, HttpServletRequest httpRequest) {
+        Long sessionUserId = SessionUtils.getUserId(httpRequest);
+
+        return new ResponseEntity<>(scheduleService.createSchedule(request, sessionUserId), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -34,13 +41,20 @@ public class ScheduleController {
     }
 
     @PutMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleResponse> updateSchedule(@PathVariable("scheduleId") Long scheduleId, @RequestBody ScheduleUpdateRequest request) {
-        return new ResponseEntity<>(scheduleService.updateSchedule(scheduleId, request), HttpStatus.OK);
+    public ResponseEntity<ScheduleResponse> updateSchedule(
+            @PathVariable("scheduleId") Long scheduleId,
+            @RequestBody ScheduleUpdateRequest request,
+            HttpServletRequest httpRequest
+    ) {
+        Long sessionUserId = SessionUtils.getUserId(httpRequest);
+        return new ResponseEntity<>(scheduleService.updateSchedule(sessionUserId, scheduleId, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable("scheduleId") Long scheduleId) {
-        scheduleService.deleteSchedule(scheduleId);
+    public ResponseEntity<Void> deleteSchedule(@PathVariable("scheduleId") Long scheduleId, HttpServletRequest httpRequest) {
+        Long sessionUserId = SessionUtils.getUserId(httpRequest);
+        scheduleService.deleteSchedule(sessionUserId, scheduleId);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

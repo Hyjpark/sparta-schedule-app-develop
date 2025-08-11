@@ -1,6 +1,7 @@
 package org.example.scheduleapiv2.schedule.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
 import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
 import org.example.scheduleapiv2.schedule.dto.ScheduleUpdateRequest;
@@ -23,9 +24,10 @@ public class ScheduleService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(()
+    public ScheduleResponse createSchedule(ScheduleCreateRequest request, Long sessionUserId) {
+        User user = userRepository.findById(sessionUserId).orElseThrow(()
                 -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
         Schedule schedule = new Schedule(request.getTitle(), request.getContents(), user);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
@@ -48,16 +50,22 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponse updateSchedule(Long scheduleId, ScheduleUpdateRequest request) {
+    public ScheduleResponse updateSchedule(Long sessionUserId, Long scheduleId,ScheduleUpdateRequest request) {
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
+
+        SessionUtils.assertUserIsOwner(sessionUserId, schedule.getUser().getId());
+
         schedule.updateTitleAndContents(request.getTitle(), request.getContents());
 
         return ScheduleResponse.of(schedule);
     }
 
     @Transactional
-    public void deleteSchedule(Long scheduleId) {
+    public void deleteSchedule(Long sessionUserId, Long scheduleId) {
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
+
+        SessionUtils.assertUserIsOwner(sessionUserId, schedule.getUser().getId());
+
         scheduleRepository.delete(schedule);
     }
 }
