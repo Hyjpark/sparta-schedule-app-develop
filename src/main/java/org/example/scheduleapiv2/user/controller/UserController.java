@@ -1,9 +1,9 @@
 package org.example.scheduleapiv2.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.scheduleapiv2.user.dto.UserCreateRequest;
-import org.example.scheduleapiv2.user.dto.UserResponse;
-import org.example.scheduleapiv2.user.dto.UserUpdateRequest;
+import org.example.scheduleapiv2.user.dto.*;
 import org.example.scheduleapiv2.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +18,19 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<UserResponse> createUser(@RequestBody UserCreateRequest request) {
         return new ResponseEntity<>(userService.createUser(request), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@RequestBody UserLoginRequest request, HttpServletRequest httpServletRequest) {
+        UserLoginResponse user = userService.login(request.getEmail(), request.getPassword());
+
+        HttpSession session = httpServletRequest.getSession();
+        session.setAttribute("LOGIN_USER", user.getId());
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
