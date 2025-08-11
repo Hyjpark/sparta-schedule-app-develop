@@ -1,6 +1,7 @@
 package org.example.scheduleapiv2.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.user.dto.UserCreateRequest;
 import org.example.scheduleapiv2.user.dto.UserLoginResponse;
 import org.example.scheduleapiv2.user.dto.UserResponse;
@@ -45,15 +46,22 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse updateUser(Long userId, UserUpdateRequest request) {
+    public UserResponse updateUser(Long sessionUserId, Long userId, UserUpdateRequest request) {
         User user = userRepository.findByIdOrElseThrow(userId);
+
+        SessionUtils.assertUserIsOwner(sessionUserId, user.getId());
+
         user.updateNameAndEmail(request.getName(), request.getEmail());
 
         return UserResponse.of(user);
     }
 
-    public void deleteUser(Long userId) {
+    @Transactional
+    public void deleteUser(Long sessionUserId, Long userId) {
         User user = userRepository.findByIdOrElseThrow(userId);
+
+        SessionUtils.assertUserIsOwner(sessionUserId, user.getId());
+
         userRepository.delete(user);
     }
 
