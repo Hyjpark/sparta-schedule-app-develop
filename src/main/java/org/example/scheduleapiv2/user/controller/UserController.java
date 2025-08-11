@@ -3,6 +3,7 @@ package org.example.scheduleapiv2.user.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.user.dto.*;
 import org.example.scheduleapiv2.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -44,13 +45,19 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequest request) {
-        return new ResponseEntity<>(userService.updateUser(userId, request), HttpStatus.OK);
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable Long userId,
+            @RequestBody UserUpdateRequest request,
+            HttpServletRequest httpRequest
+    ) {
+        Long sessionUserId = SessionUtils.getUserId(httpRequest);
+        return new ResponseEntity<>(userService.updateUser(sessionUserId, userId, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId, HttpServletRequest httpRequest) {
+        Long sessionUserId = SessionUtils.getUserId(httpRequest);
+        userService.deleteUser(sessionUserId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
