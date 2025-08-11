@@ -23,9 +23,10 @@ public class ScheduleService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(()
+    public ScheduleResponse createSchedule(ScheduleCreateRequest request, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(()
                 -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
         Schedule schedule = new Schedule(request.getTitle(), request.getContents(), user);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);

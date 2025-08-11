@@ -6,5 +6,4 @@ import lombok.Getter;
 public class ScheduleCreateRequest {
     private String title;
     private String contents;
-    private Long userId;
 }
