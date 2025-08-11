@@ -31,4 +31,11 @@ public class UserService {
                 .map(UserResponse::of)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public UserResponse findUserById(Long userId) {
+        User user = userRepository.findByIdOrElseThrow(userId);
+
+        return UserResponse.of(user);
+    }
 }
