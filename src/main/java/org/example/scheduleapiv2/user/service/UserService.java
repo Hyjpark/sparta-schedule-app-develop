@@ -8,6 +8,8 @@ import org.example.scheduleapiv2.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -21,5 +23,12 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         return UserResponse.of(savedUser);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserResponse> findAllUsers() {
+        return userRepository.findAll().stream()
+                .map(UserResponse::of)
+                .toList();
     }
 }
