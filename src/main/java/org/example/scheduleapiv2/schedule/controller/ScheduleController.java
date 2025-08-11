@@ -2,6 +2,7 @@ package org.example.scheduleapiv2.schedule.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
@@ -24,7 +25,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<ScheduleResponse> createSchedule(@RequestBody ScheduleCreateRequest request, HttpServletRequest httpRequest) {
+    public ResponseEntity<ScheduleResponse> createSchedule(@Valid @RequestBody ScheduleCreateRequest request, HttpServletRequest httpRequest) {
         Long sessionUserId = SessionUtils.getUserId(httpRequest);
 
         return new ResponseEntity<>(scheduleService.createSchedule(request, sessionUserId), HttpStatus.CREATED);
@@ -43,7 +44,7 @@ public class ScheduleController {
     @PutMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponse> updateSchedule(
             @PathVariable("scheduleId") Long scheduleId,
-            @RequestBody ScheduleUpdateRequest request,
+            @Valid @RequestBody ScheduleUpdateRequest request,
             HttpServletRequest httpRequest
     ) {
         Long sessionUserId = SessionUtils.getUserId(httpRequest);
