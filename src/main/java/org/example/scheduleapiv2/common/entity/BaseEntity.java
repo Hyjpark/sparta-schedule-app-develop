@@ -1,4 +1,4 @@
-package org.example.scheduleapiv2.schedule.entity;
+package org.example.scheduleapiv2.common.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

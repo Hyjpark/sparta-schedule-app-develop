@@ -6,6 +6,8 @@ import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
 import org.example.scheduleapiv2.schedule.dto.ScheduleUpdateRequest;
 import org.example.scheduleapiv2.schedule.entity.Schedule;
 import org.example.scheduleapiv2.schedule.repository.ScheduleRepository;
+import org.example.scheduleapiv2.user.entity.User;
+import org.example.scheduleapiv2.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +20,13 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
-
-        Schedule schedule = new Schedule(request.getTitle(), request.getContents(), request.getAuthor());
+        User user = userRepository.findById(request.getUserId()).orElseThrow(()
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        Schedule schedule = new Schedule(request.getTitle(), request.getContents(), user);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
