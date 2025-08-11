@@ -17,10 +17,12 @@ public class User extends BaseEntity {
     private Long id;
     private String name;
     private String email;
+    private String password;
 
-    public User(String email, String name) {
+    public User(String email, String name, String password) {
         this.email = email;
         this.name = name;
+        this.password = password;
     }
 
     public void updateNameAndEmail(String name, String email) {
