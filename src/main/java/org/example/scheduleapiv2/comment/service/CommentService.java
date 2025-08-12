@@ -59,4 +59,12 @@ public class CommentService {
 
         return CommentResponse.of(comment);
     }
+
+    public void deleteComment(Long commentId, Long sessionUserId) {
+        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
+
+        SessionUtils.assertUserIsOwner(sessionUserId, comment.getUser().getId());
+
+        commentRepository.delete(comment);
+    }
 }

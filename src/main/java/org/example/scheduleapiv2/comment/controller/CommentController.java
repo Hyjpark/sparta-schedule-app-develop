@@ -47,4 +47,15 @@ public class CommentController {
 
         return new ResponseEntity<>(commentService.updateComment(commentId, commentRequest, sessionUserId), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable("commentId") Long commentId,
+            HttpServletRequest httpRequest
+    ) {
+        Long sessionUserId = SessionUtils.getUserId(httpRequest);
+        commentService.deleteComment(commentId, sessionUserId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
