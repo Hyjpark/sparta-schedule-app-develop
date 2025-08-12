@@ -3,6 +3,7 @@ package org.example.scheduleapiv2.user.service;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.common.exception.ApiException;
 import org.example.scheduleapiv2.common.util.SessionUtils;
+import org.example.scheduleapiv2.security.config.PasswordEncoder;
 import org.example.scheduleapiv2.user.dto.UserCreateRequest;
 import org.example.scheduleapiv2.user.dto.UserLoginResponse;
 import org.example.scheduleapiv2.user.dto.UserResponse;
@@ -23,6 +24,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResponse createUser(UserCreateRequest request) {
@@ -30,7 +32,9 @@ public class UserService {
             throw new ApiException(UserErrorCode.EMAIL_DUPLICATION);
         });
 
-        User user = new User(request.getName(), request.getEmail(), request.getPassword());
+        String encodePw = passwordEncoder.encode(request.getPassword());
+
+        User user = new User(request.getName(), request.getEmail(), encodePw);
 
         User savedUser = userRepository.save(user);
 
