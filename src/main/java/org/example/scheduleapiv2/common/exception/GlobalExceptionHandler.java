@@ -40,12 +40,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
     }
 
-    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
-        ErrorCode errorCode = UserErrorCode.EMAIL_DUPLICATION;
-        return handleExceptionInternal(errorCode);
-    }
-
     private ResponseEntity<ErrorResponse> handleExceptionInternal(ErrorCode errorCode) {
         return ResponseEntity.status(errorCode.getHttpStatus()).body(makeErrorResponse(errorCode));
     }

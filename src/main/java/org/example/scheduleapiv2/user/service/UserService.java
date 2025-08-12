@@ -27,7 +27,7 @@ public class UserService {
     @Transactional
     public UserResponse createUser(UserCreateRequest request) {
         userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
-            new ApiException(UserErrorCode.EMAIL_DUPLICATION);
+            throw new ApiException(UserErrorCode.EMAIL_DUPLICATION);
         });
 
         User user = new User(request.getName(), request.getEmail(), request.getPassword());
