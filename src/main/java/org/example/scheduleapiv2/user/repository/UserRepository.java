@@ -1,5 +1,7 @@
 package org.example.scheduleapiv2.user.repository;
 
+import org.example.scheduleapiv2.common.error.GlobalErrorCode;
+import org.example.scheduleapiv2.common.exception.ApiException;
 import org.example.scheduleapiv2.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
@@ -12,11 +14,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     default User findByEmailOrElseThrow(String email) {
         return findByEmail(email).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
     }
 
     default User findByIdOrElseThrow(Long id) {
         return findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
     }
 }

@@ -2,16 +2,24 @@ package org.example.scheduleapiv2.common.exception;
 
 import org.example.scheduleapiv2.common.error.ErrorCode;
 import org.example.scheduleapiv2.common.error.GlobalErrorCode;
+import org.example.scheduleapiv2.user.error.UserErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ErrorResponse> handleApiException(ApiException e) {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -30,6 +38,12 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
+        ErrorCode errorCode = UserErrorCode.EMAIL_DUPLICATION;
+        return handleExceptionInternal(errorCode);
     }
 
     private ResponseEntity<ErrorResponse> handleExceptionInternal(ErrorCode errorCode) {
