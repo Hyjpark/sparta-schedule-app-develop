@@ -1,5 +1,7 @@
 package org.example.scheduleapiv2.comment.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.comment.dto.CommentCreateRequest;
@@ -56,8 +58,9 @@ public class CommentService {
         SessionUtils.assertUserIsOwner(sessionUserId, comment.getUser().getId());
 
         comment.updateContents(commentRequest.getContents());
+        Comment updatedComment = commentRepository.saveAndFlush(comment);
 
-        return CommentResponse.of(comment);
+        return CommentResponse.of(updatedComment);
     }
 
     public void deleteComment(Long commentId, Long sessionUserId) {

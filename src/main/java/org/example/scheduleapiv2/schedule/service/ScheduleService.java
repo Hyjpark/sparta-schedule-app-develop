@@ -58,8 +58,9 @@ public class ScheduleService {
         SessionUtils.assertUserIsOwner(sessionUserId, schedule.getUser().getId());
 
         schedule.updateTitleAndContents(request.getTitle(), request.getContents());
+        Schedule updateSchedule = scheduleRepository.saveAndFlush(schedule);
 
-        return ScheduleResponse.of(schedule);
+        return ScheduleResponse.of(updateSchedule);
     }
 
     @Transactional
