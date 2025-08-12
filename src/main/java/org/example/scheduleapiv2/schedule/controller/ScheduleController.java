@@ -9,8 +9,6 @@ import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
 import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
 import org.example.scheduleapiv2.schedule.dto.ScheduleUpdateRequest;
 import org.example.scheduleapiv2.schedule.service.ScheduleService;
-import org.example.scheduleapiv2.user.entity.User;
-import org.example.scheduleapiv2.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
