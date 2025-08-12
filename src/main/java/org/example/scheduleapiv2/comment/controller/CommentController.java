@@ -1,6 +1,7 @@
 package org.example.scheduleapiv2.comment.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.comment.dto.CommentCreateRequest;
 import org.example.scheduleapiv2.comment.dto.CommentResponse;
@@ -10,6 +11,8 @@ import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/schedules/{scheduleId}/comments")
@@ -21,7 +24,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommentResponse> createComment(
             @PathVariable("scheduleId") Long scheduleId,
-            @RequestBody CommentCreateRequest commentRequest,
+            @Valid @RequestBody CommentCreateRequest commentRequest,
             HttpServletRequest request
     ) {
         Long sessionUserId = SessionUtils.getUserId(request);
