@@ -1,12 +1,15 @@
 package org.example.scheduleapiv2.comment.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.comment.dto.CommentCreateRequest;
 import org.example.scheduleapiv2.comment.dto.CommentResponse;
+import org.example.scheduleapiv2.comment.dto.CommentUpdateRequest;
 import org.example.scheduleapiv2.comment.entity.Comment;
 import org.example.scheduleapiv2.comment.repository.CommentRepository;
 import org.example.scheduleapiv2.common.error.GlobalErrorCode;
 import org.example.scheduleapiv2.common.exception.ApiException;
+import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.schedule.entity.Schedule;
 import org.example.scheduleapiv2.schedule.repository.ScheduleRepository;
 import org.example.scheduleapiv2.user.entity.User;
@@ -44,5 +47,16 @@ public class CommentService {
         return commentRepository.findCommentsByScheduleId(scheduleId).stream()
                 .map(CommentResponse::of)
                 .toList();
+    }
+
+    @Transactional
+    public CommentResponse updateComment(Long commentId, CommentUpdateRequest commentRequest, Long sessionUserId) {
+        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
+
+        SessionUtils.assertUserIsOwner(sessionUserId, comment.getUser().getId());
+
+        comment.updateContents(commentRequest.getContents());
+
+        return CommentResponse.of(comment);
     }
 }
