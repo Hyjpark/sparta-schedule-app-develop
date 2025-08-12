@@ -1,6 +1,8 @@
 package org.example.scheduleapiv2.schedule.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleapiv2.common.error.GlobalErrorCode;
+import org.example.scheduleapiv2.common.exception.ApiException;
 import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
 import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
@@ -26,7 +28,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponse createSchedule(ScheduleCreateRequest request, Long sessionUserId) {
         User user = userRepository.findById(sessionUserId).orElseThrow(()
-                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                -> new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
 
         Schedule schedule = new Schedule(request.getTitle(), request.getContents(), user);
 

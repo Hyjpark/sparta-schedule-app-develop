@@ -1,12 +1,14 @@
 package org.example.scheduleapiv2.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleapiv2.common.exception.ApiException;
 import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.user.dto.UserCreateRequest;
 import org.example.scheduleapiv2.user.dto.UserLoginResponse;
 import org.example.scheduleapiv2.user.dto.UserResponse;
 import org.example.scheduleapiv2.user.dto.UserUpdateRequest;
 import org.example.scheduleapiv2.user.entity.User;
+import org.example.scheduleapiv2.user.error.UserErrorCode;
 import org.example.scheduleapiv2.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,10 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(UserCreateRequest request) {
+        userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
+            throw new ApiException(UserErrorCode.EMAIL_DUPLICATION);
+        });
+
         User user = new User(request.getName(), request.getEmail(), request.getPassword());
 
         User savedUser = userRepository.save(user);
@@ -69,7 +75,7 @@ public class UserService {
         User user = userRepository.findByEmailOrElseThrow(email);
 
         if (!ObjectUtils.nullSafeEquals(password, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
+            throw new ApiException(UserErrorCode.PASSWORD_MISMATCH);
         }
 
         return new UserLoginResponse(user.getId());

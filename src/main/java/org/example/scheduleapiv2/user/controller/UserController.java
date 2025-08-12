@@ -2,6 +2,7 @@ package org.example.scheduleapiv2.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.user.dto.*;
@@ -20,12 +21,12 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserCreateRequest request) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserCreateRequest request) {
         return new ResponseEntity<>(userService.createUser(request), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody UserLoginRequest request, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Void> login(@Valid @RequestBody UserLoginRequest request, HttpServletRequest httpServletRequest) {
         UserLoginResponse user = userService.login(request.getEmail(), request.getPassword());
 
         HttpSession session = httpServletRequest.getSession();
@@ -47,7 +48,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long userId,
-            @RequestBody UserUpdateRequest request,
+            @Valid @RequestBody UserUpdateRequest request,
             HttpServletRequest httpRequest
     ) {
         Long sessionUserId = SessionUtils.getUserId(httpRequest);
