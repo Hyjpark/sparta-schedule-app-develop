@@ -12,6 +12,9 @@ import org.example.scheduleapiv2.schedule.repository.ScheduleRepository;
 import org.example.scheduleapiv2.user.entity.User;
 import org.example.scheduleapiv2.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
 
+    @Transactional
     public CommentResponse createComment(Long scheduleId, CommentCreateRequest commentRequest, Long sessionUserId) {
         User user = userRepository.findById(sessionUserId).orElseThrow(() ->
                 new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
@@ -31,5 +35,14 @@ public class CommentService {
         Comment savedComment = commentRepository.save(comment);
 
         return CommentResponse.of(savedComment);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponse> getCommentsByScheduleId(Long scheduleId) {
+        scheduleRepository.findByIdOrElseThrow(scheduleId);
+
+        return commentRepository.findCommentsByScheduleId(scheduleId).stream()
+                .map(CommentResponse::of)
+                .toList();
     }
 }

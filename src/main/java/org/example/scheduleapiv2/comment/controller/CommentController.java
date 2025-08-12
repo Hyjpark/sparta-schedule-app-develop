@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.comment.dto.CommentCreateRequest;
 import org.example.scheduleapiv2.comment.dto.CommentResponse;
-import org.example.scheduleapiv2.comment.entity.Comment;
 import org.example.scheduleapiv2.comment.service.CommentService;
 import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.springframework.http.HttpStatus;
@@ -30,5 +29,10 @@ public class CommentController {
         Long sessionUserId = SessionUtils.getUserId(request);
 
         return new ResponseEntity<>(commentService.createComment(scheduleId, commentRequest, sessionUserId), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CommentResponse>> getCommentsByScheduleId(@PathVariable Long scheduleId) {
+        return new ResponseEntity<>(commentService.getCommentsByScheduleId(scheduleId), HttpStatus.OK);
     }
 }
