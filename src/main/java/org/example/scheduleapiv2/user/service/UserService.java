@@ -78,7 +78,7 @@ public class UserService {
     public UserLoginResponse login(String email, String password) {
         User user = userRepository.findByEmailOrElseThrow(email);
 
-        if (!ObjectUtils.nullSafeEquals(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new ApiException(UserErrorCode.PASSWORD_MISMATCH);
         }
 
