@@ -35,7 +35,7 @@ public class ScheduleController {
     @GetMapping
     public ResponseEntity<List<SchedulePagingResponse>> findAllSchedules(
             @PageableDefault(page = 0, size = 10, sort = "modifiedAt", direction = Sort.Direction.DESC) Pageable pageable
-            ) {
+    ) {
         return new ResponseEntity<>(scheduleService.findAllSchedules(pageable), HttpStatus.OK);
     }
 
@@ -54,12 +54,14 @@ public class ScheduleController {
             HttpServletRequest httpRequest
     ) {
         Long sessionUserId = SessionUtils.getUserId(httpRequest);
+
         return new ResponseEntity<>(scheduleService.updateSchedule(sessionUserId, scheduleId, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable("scheduleId") Long scheduleId, HttpServletRequest httpRequest) {
         Long sessionUserId = SessionUtils.getUserId(httpRequest);
+        
         scheduleService.deleteSchedule(sessionUserId, scheduleId);
 
         return new ResponseEntity<>(HttpStatus.OK);
