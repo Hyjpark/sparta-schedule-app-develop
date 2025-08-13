@@ -14,4 +14,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     }
 
     Page<Schedule> findAll(Pageable pageable);
+
+    void deleteByUserId(Long id);
 }

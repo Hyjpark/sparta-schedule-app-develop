@@ -1,8 +1,10 @@
 package org.example.scheduleapiv2.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleapiv2.comment.repository.CommentRepository;
 import org.example.scheduleapiv2.common.exception.ApiException;
 import org.example.scheduleapiv2.common.util.SessionUtils;
+import org.example.scheduleapiv2.schedule.repository.ScheduleRepository;
 import org.example.scheduleapiv2.security.config.PasswordEncoder;
 import org.example.scheduleapiv2.user.dto.UserCreateRequest;
 import org.example.scheduleapiv2.user.dto.UserLoginResponse;
@@ -24,6 +26,8 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -71,6 +75,10 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         SessionUtils.assertUserIsOwner(sessionUserId, user.getId());
+
+        commentRepository.deleteByUserId(user.getId());
+
+        scheduleRepository.deleteByUserId(user.getId());
 
         userRepository.delete(user);
     }
