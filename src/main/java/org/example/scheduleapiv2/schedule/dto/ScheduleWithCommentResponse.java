@@ -1,16 +1,15 @@
 package org.example.scheduleapiv2.schedule.dto;
 
 import lombok.Getter;
+import org.example.scheduleapiv2.comment.dto.CommentPagingResponse;
 import org.example.scheduleapiv2.comment.dto.CommentResponse;
 import org.example.scheduleapiv2.schedule.entity.Schedule;
-import org.example.scheduleapiv2.user.entity.User;
-import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-public class ScheduleResponse {
+public class ScheduleWithCommentResponse {
 
     private final Long id;
     private final String title;
@@ -18,24 +17,28 @@ public class ScheduleResponse {
     private final Long userId;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
+    private final List<CommentPagingResponse> comments;
 
-    public ScheduleResponse(Long id, String title, String contents, User user, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+
+    public ScheduleWithCommentResponse(Long id, String title, String contents, Long userId, LocalDateTime createdAt, LocalDateTime modifiedAt, List<CommentPagingResponse> comments) {
         this.id = id;
         this.title = title;
         this.contents = contents;
-        this.userId = user.getId();
+        this.userId = userId;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
+        this.comments = comments;
     }
 
-    public static ScheduleResponse of(Schedule schedule) {
-        return new ScheduleResponse(
+    public static ScheduleWithCommentResponse of(Schedule schedule, List<CommentPagingResponse> commentPage) {
+        return new ScheduleWithCommentResponse(
                 schedule.getId(),
                 schedule.getTitle(),
                 schedule.getContents(),
-                schedule.getUser(),
+                schedule.getId(),
                 schedule.getCreatedAt(),
-                schedule.getModifiedAt()
+                schedule.getModifiedAt(),
+                commentPage
         );
     }
 }
