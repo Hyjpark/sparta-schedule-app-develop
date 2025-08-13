@@ -32,9 +32,7 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(UserCreateRequest request) {
-        userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
-            throw new ApiException(UserErrorCode.EMAIL_DUPLICATION);
-        });
+        checkEmailDuplication(request.getEmail());
 
         String encodePw = passwordEncoder.encode(request.getPassword());
 
@@ -65,6 +63,7 @@ public class UserService {
 
         SessionUtils.assertUserIsOwner(sessionUserId, user.getId());
 
+        checkEmailDuplication(request.getEmail());
         user.updateNameAndEmail(request.getName(), request.getEmail());
 
         return UserResponse.of(user);
@@ -91,5 +90,11 @@ public class UserService {
         }
 
         return new UserLoginResponse(user.getId());
+    }
+
+    private void checkEmailDuplication(String email) {
+        userRepository.findByEmail(email).ifPresent(user -> {
+            throw new ApiException(UserErrorCode.EMAIL_DUPLICATION);
+        });
     }
 }
