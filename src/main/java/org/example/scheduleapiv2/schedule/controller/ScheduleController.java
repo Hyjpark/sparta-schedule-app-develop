@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.common.util.SessionUtils;
-import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
-import org.example.scheduleapiv2.schedule.dto.SchedulePagingResponse;
-import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
-import org.example.scheduleapiv2.schedule.dto.ScheduleUpdateRequest;
+import org.example.scheduleapiv2.schedule.dto.*;
 import org.example.scheduleapiv2.schedule.service.ScheduleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,8 +40,11 @@ public class ScheduleController {
     }
 
     @GetMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleResponse> findScheduleById(@PathVariable("scheduleId") Long scheduleId) {
-        return new ResponseEntity<>(scheduleService.findScheduleById(scheduleId), HttpStatus.OK);
+    public ResponseEntity<ScheduleWithCommentResponse> findScheduleById(
+            @PathVariable("scheduleId") Long scheduleId,
+            @PageableDefault(page = 0, size = 10, sort = "modifiedAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return new ResponseEntity<>(scheduleService.findScheduleById(scheduleId, pageable), HttpStatus.OK);
     }
 
     @PutMapping("/{scheduleId}")
