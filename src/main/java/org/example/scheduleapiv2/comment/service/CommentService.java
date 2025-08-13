@@ -52,8 +52,8 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse updateComment(Long commentId, CommentUpdateRequest commentRequest, Long sessionUserId) {
-        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
+    public CommentResponse updateComment(Long scheduleId, Long commentId, CommentUpdateRequest commentRequest, Long sessionUserId) {
+        Comment comment = commentRepository.findByIdAndScheduleIdOrElseThorw(commentId, scheduleId);
 
         SessionUtils.assertUserIsOwner(sessionUserId, comment.getUser().getId());
 
@@ -63,8 +63,8 @@ public class CommentService {
         return CommentResponse.of(updatedComment);
     }
 
-    public void deleteComment(Long commentId, Long sessionUserId) {
-        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
+    public void deleteComment(Long scheduleId, Long commentId, Long sessionUserId) {
+        Comment comment = commentRepository.findByIdAndScheduleIdOrElseThorw(commentId, scheduleId);
 
         SessionUtils.assertUserIsOwner(sessionUserId, comment.getUser().getId());
 
