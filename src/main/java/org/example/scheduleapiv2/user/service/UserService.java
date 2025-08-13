@@ -38,7 +38,7 @@ public class UserService {
 
         String encodePw = passwordEncoder.encode(request.getPassword());
 
-        User user = new User(request.getName(), request.getEmail(), encodePw);
+        User user = User.create(request.getName(), request.getEmail(), encodePw);
 
         User savedUser = userRepository.save(user);
 
