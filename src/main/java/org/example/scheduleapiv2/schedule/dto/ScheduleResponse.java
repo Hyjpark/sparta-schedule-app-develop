@@ -19,7 +19,7 @@ public class ScheduleResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public ScheduleResponse(Long id, String title, String contents, User user, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    private ScheduleResponse(Long id, String title, String contents, User user, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.title = title;
         this.contents = contents;
