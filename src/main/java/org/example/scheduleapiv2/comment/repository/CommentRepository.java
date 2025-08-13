@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findCommentsByScheduleId(Long scheduleId);
@@ -20,4 +21,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     int countByScheduleId(Long scheduleId);
 
     Page<Comment> findByScheduleId(Long scheduleId, Pageable pageable);
+
+    void deleteByScheduleId(Long id);
+
+    void deleteByUserId(Long userId);
 }
