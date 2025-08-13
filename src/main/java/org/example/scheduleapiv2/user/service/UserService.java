@@ -89,7 +89,7 @@ public class UserService {
             throw new ApiException(UserErrorCode.PASSWORD_MISMATCH);
         }
 
-        return new UserLoginResponse(user.getId());
+        return UserLoginResponse.of(user.getId());
     }
 
     private void checkEmailDuplication(String email) {
