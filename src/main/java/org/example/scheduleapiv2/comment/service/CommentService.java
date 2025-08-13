@@ -36,7 +36,7 @@ public class CommentService {
 
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
 
-        Comment comment = new Comment(commentRequest.getContents(), user, schedule);
+        Comment comment = Comment.create(commentRequest.getContents(), user, schedule);
         Comment savedComment = commentRepository.save(comment);
 
         return CommentResponse.of(savedComment);

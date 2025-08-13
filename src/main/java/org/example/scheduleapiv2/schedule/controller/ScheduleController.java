@@ -61,7 +61,7 @@ public class ScheduleController {
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable("scheduleId") Long scheduleId, HttpServletRequest httpRequest) {
         Long sessionUserId = SessionUtils.getUserId(httpRequest);
-        
+
         scheduleService.deleteSchedule(sessionUserId, scheduleId);
 
         return new ResponseEntity<>(HttpStatus.OK);

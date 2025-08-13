@@ -1,6 +1,7 @@
 package org.example.scheduleapiv2.comment.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.scheduleapiv2.common.entity.BaseEntity;
@@ -24,10 +25,19 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    public Comment(String contents, User user, Schedule schedule) {
+    @Builder
+    private Comment(String contents, User user, Schedule schedule) {
         this.contents = contents;
         this.user = user;
         this.schedule = schedule;
+    }
+
+    public static Comment create(String contents, User user, Schedule schedule) {
+        return Comment.builder()
+                .contents(contents)
+                .user(user)
+                .schedule(schedule)
+                .build();
     }
 
     public void updateContents(String contents) {
