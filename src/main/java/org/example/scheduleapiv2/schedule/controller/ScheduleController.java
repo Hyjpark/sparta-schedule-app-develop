@@ -6,9 +6,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.common.util.SessionUtils;
 import org.example.scheduleapiv2.schedule.dto.ScheduleCreateRequest;
+import org.example.scheduleapiv2.schedule.dto.SchedulePagingResponse;
 import org.example.scheduleapiv2.schedule.dto.ScheduleResponse;
 import org.example.scheduleapiv2.schedule.dto.ScheduleUpdateRequest;
 import org.example.scheduleapiv2.schedule.service.ScheduleService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +33,12 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponse>> findAllSchedules() {
-        return new ResponseEntity<>(scheduleService.findAllSchedules(), HttpStatus.OK);
+    public ResponseEntity<List<SchedulePagingResponse>> findAllSchedules(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return new ResponseEntity<>(scheduleService.findAllSchedules(pageRequest), HttpStatus.OK);
     }
 
     @GetMapping("/{scheduleId}")

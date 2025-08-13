@@ -1,10 +1,13 @@
 package org.example.scheduleapiv2.schedule.dto;
 
 import lombok.Getter;
+import org.example.scheduleapiv2.comment.dto.CommentResponse;
 import org.example.scheduleapiv2.schedule.entity.Schedule;
 import org.example.scheduleapiv2.user.entity.User;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class ScheduleResponse {

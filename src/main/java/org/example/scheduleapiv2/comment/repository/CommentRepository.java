@@ -14,4 +14,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         return findById(commentId).orElseThrow(() ->
                 new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
     }
+
+    int countByScheduleId(Long scheduleId);
 }
