@@ -32,13 +32,11 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(UserCreateRequest request) {
-        userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
-            throw new ApiException(UserErrorCode.EMAIL_DUPLICATION);
-        });
+        checkEmailDuplication(request.getEmail());
 
         String encodePw = passwordEncoder.encode(request.getPassword());
 
-        User user = new User(request.getName(), request.getEmail(), encodePw);
+        User user = User.create(request.getName(), request.getEmail(), encodePw);
 
         User savedUser = userRepository.save(user);
 
@@ -65,6 +63,7 @@ public class UserService {
 
         SessionUtils.assertUserIsOwner(sessionUserId, user.getId());
 
+        checkEmailDuplication(request.getEmail());
         user.updateNameAndEmail(request.getName(), request.getEmail());
 
         return UserResponse.of(user);
@@ -90,6 +89,12 @@ public class UserService {
             throw new ApiException(UserErrorCode.PASSWORD_MISMATCH);
         }
 
-        return new UserLoginResponse(user.getId());
+        return UserLoginResponse.of(user.getId());
+    }
+
+    private void checkEmailDuplication(String email) {
+        userRepository.findByEmail(email).ifPresent(user -> {
+            throw new ApiException(UserErrorCode.EMAIL_DUPLICATION);
+        });
     }
 }

@@ -34,7 +34,7 @@ public class ScheduleService {
         User user = userRepository.findById(sessionUserId).orElseThrow(()
                 -> new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
 
-        Schedule schedule = new Schedule(request.getTitle(), request.getContents(), user);
+        Schedule schedule = Schedule.create(request.getTitle(), request.getContents(), user);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 

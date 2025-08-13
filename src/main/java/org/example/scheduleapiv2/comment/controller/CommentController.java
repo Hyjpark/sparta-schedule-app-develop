@@ -39,22 +39,24 @@ public class CommentController {
 
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentResponse> updateComment(
+            @PathVariable("scheduleId") Long scheduleId,
             @PathVariable("commentId") Long commentId,
             @Valid @RequestBody CommentUpdateRequest commentRequest,
             HttpServletRequest httpRequest
     ) {
         Long sessionUserId = SessionUtils.getUserId(httpRequest);
 
-        return new ResponseEntity<>(commentService.updateComment(commentId, commentRequest, sessionUserId), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.updateComment(scheduleId, commentId, commentRequest, sessionUserId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(
+            @PathVariable("scheduleId") Long scheduleId,
             @PathVariable("commentId") Long commentId,
             HttpServletRequest httpRequest
     ) {
         Long sessionUserId = SessionUtils.getUserId(httpRequest);
-        commentService.deleteComment(commentId, sessionUserId);
+        commentService.deleteComment(scheduleId, commentId, sessionUserId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

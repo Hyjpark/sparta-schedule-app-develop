@@ -6,7 +6,11 @@ import lombok.Getter;
 public class UserLoginResponse {
     private Long id;
 
-    public UserLoginResponse(Long id) {
+    private UserLoginResponse(Long id) {
         this.id = id;
+    }
+
+    public static UserLoginResponse of(Long id) {
+        return new UserLoginResponse(id);
     }
 }

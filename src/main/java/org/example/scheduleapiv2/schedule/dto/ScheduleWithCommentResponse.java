@@ -20,7 +20,7 @@ public class ScheduleWithCommentResponse {
     private final List<CommentPagingResponse> comments;
 
 
-    public ScheduleWithCommentResponse(Long id, String title, String contents, Long userId, LocalDateTime createdAt, LocalDateTime modifiedAt, List<CommentPagingResponse> comments) {
+    private ScheduleWithCommentResponse(Long id, String title, String contents, Long userId, LocalDateTime createdAt, LocalDateTime modifiedAt, List<CommentPagingResponse> comments) {
         this.id = id;
         this.title = title;
         this.contents = contents;

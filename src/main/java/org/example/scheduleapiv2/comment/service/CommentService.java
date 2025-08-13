@@ -36,7 +36,7 @@ public class CommentService {
 
         Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
 
-        Comment comment = new Comment(commentRequest.getContents(), user, schedule);
+        Comment comment = Comment.create(commentRequest.getContents(), user, schedule);
         Comment savedComment = commentRepository.save(comment);
 
         return CommentResponse.of(savedComment);
@@ -52,8 +52,8 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse updateComment(Long commentId, CommentUpdateRequest commentRequest, Long sessionUserId) {
-        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
+    public CommentResponse updateComment(Long scheduleId, Long commentId, CommentUpdateRequest commentRequest, Long sessionUserId) {
+        Comment comment = commentRepository.findByIdAndScheduleIdOrElseThrow(commentId, scheduleId);
 
         SessionUtils.assertUserIsOwner(sessionUserId, comment.getUser().getId());
 
@@ -63,8 +63,8 @@ public class CommentService {
         return CommentResponse.of(updatedComment);
     }
 
-    public void deleteComment(Long commentId, Long sessionUserId) {
-        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
+    public void deleteComment(Long scheduleId, Long commentId, Long sessionUserId) {
+        Comment comment = commentRepository.findByIdAndScheduleIdOrElseThrow(commentId, scheduleId);
 
         SessionUtils.assertUserIsOwner(sessionUserId, comment.getUser().getId());
 

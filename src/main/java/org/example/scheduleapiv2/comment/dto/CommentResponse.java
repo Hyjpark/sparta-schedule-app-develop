@@ -15,7 +15,7 @@ public class CommentResponse {
     private final Long userId;
     private final Long scheduleId;
 
-    public CommentResponse(Long id, String contents, LocalDateTime createdAt, LocalDateTime modifiedAt, Long userId, Long scheduleId) {
+    private CommentResponse(Long id, String contents, LocalDateTime createdAt, LocalDateTime modifiedAt, Long userId, Long scheduleId) {
         this.id = id;
         this.contents = contents;
         this.createdAt = createdAt;

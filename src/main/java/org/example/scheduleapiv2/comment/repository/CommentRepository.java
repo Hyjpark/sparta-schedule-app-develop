@@ -13,8 +13,15 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findCommentsByScheduleId(Long scheduleId);
 
+    Optional<Comment> findByIdAndScheduleId(Long commentId, Long scheduleId);
+
     default Comment findByIdOrElseThrow(Long commentId) {
         return findById(commentId).orElseThrow(() ->
+                new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
+    }
+
+    default Comment findByIdAndScheduleIdOrElseThrow(Long commentId, Long scheduleId) {
+        return findByIdAndScheduleId(commentId, scheduleId).orElseThrow(() ->
                 new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
     }
 

@@ -14,7 +14,7 @@ public class UserResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public UserResponse(Long id, String name, String email, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    private UserResponse(Long id, String name, String email, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.name = name;
         this.email = email;

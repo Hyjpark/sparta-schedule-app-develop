@@ -12,7 +12,7 @@ public class CommentPagingResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public CommentPagingResponse(String contents, String name, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    private CommentPagingResponse(String contents, String name, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.contents = contents;
         this.name = name;
         this.createdAt = createdAt;
