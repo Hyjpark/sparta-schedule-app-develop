@@ -20,7 +20,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
                 new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
     }
 
-    default Comment findByIdAndScheduleIdOrElseThorw(Long commentId, Long scheduleId) {
+    default Comment findByIdAndScheduleIdOrElseThrow(Long commentId, Long scheduleId) {
         return findByIdAndScheduleId(commentId, scheduleId).orElseThrow(() ->
                 new ApiException(GlobalErrorCode.RESOURCE_NOT_FOUND));
     }
