@@ -14,6 +14,7 @@ import org.example.scheduleapiv2.schedule.repository.ScheduleRepository;
 import org.example.scheduleapiv2.user.entity.User;
 import org.example.scheduleapiv2.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +41,8 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<SchedulePagingResponse> findAllSchedules(PageRequest pageRequest) {
-        return scheduleRepository.findAll(pageRequest).getContent().stream()
+    public List<SchedulePagingResponse> findAllSchedules(Pageable pageable) {
+        return scheduleRepository.findAll(pageable).getContent().stream()
                 .map(schedule -> {
                     int commentCount = commentRepository.countByScheduleId(schedule.getId());
                     User user = userRepository.findByIdOrElseThrow(schedule.getUser().getId());
