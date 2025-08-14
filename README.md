@@ -930,36 +930,36 @@
 
 ```mermaid
 classDiagram
-    direction BT
+direction BT
 
-    class Comment {
-        bigint id
-        varchar(255) contents
-        bigint user_id
-        bigint schedule_id
-        datetime(6) created_at
-        datetime(6) modified_at
-    }
+class comment {
+    datetime(6) created_at
+    datetime(6) modified_at
+    bigint schedule_id
+    bigint user_id
+    varchar(255) contents
+    bigint id
+}
 
-    class Schedule {
-        bigint id
-        varchar(255) title
-        varchar(255) contents
-        bigint user_id
-        datetime(6) created_at
-        datetime(6) modified_at
-    }
+class schedule {
+    datetime(6) created_at
+    datetime(6) modified_at
+    bigint user_id
+    varchar(255) contents
+    varchar(255) title
+    bigint id
+}
 
-    class User {
-        bigint id
-        varchar(255) name
-        varchar(255) email
-        varchar(255) password
-        datetime(6) created_at
-        datetime(6) modified_at
-    }
+class user {
+    datetime(6) created_at
+    datetime(6) modified_at
+    varchar(255) email
+    varchar(255) name
+    varchar(255) password
+    bigint id
+}
 
-    Comment --> Schedule : schedule_id:id
-    Comment --> User : user_id:id
-    Schedule --> User : user_id:id
+comment --> schedule
+comment --> user
+schedule --> user
 ```
