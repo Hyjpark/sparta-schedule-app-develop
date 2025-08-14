@@ -1,8 +1,5 @@
 package org.example.scheduleapiv2.comment.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleapiv2.comment.dto.CommentCreateRequest;
 import org.example.scheduleapiv2.comment.dto.CommentResponse;
@@ -21,6 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 댓글(Comment) 관련 비즈니스 로직을 처리하는 서비스 클래스.
+ *
+ * 댓글 생성, 조회, 수정, 삭제 기능을 제공하며,
+ * 사용자 검증과 권한 확인을 수행합니다.
+ */
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -29,6 +32,15 @@ public class CommentService {
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
 
+    /**
+     * 댓글을 생성합니다.
+     *
+     * @param scheduleId 댓글을 달 일정 ID
+     * @param commentRequest 생성할 댓글 정보
+     * @param sessionUserId 로그인한 사용자 ID
+     * @return 생성된 댓글 정보
+     * @throws ApiException 로그인한 사용자가 존재하지 않을 경우
+     */
     @Transactional
     public CommentResponse createComment(Long scheduleId, CommentCreateRequest commentRequest, Long sessionUserId) {
         User user = userRepository.findById(sessionUserId).orElseThrow(() ->
@@ -42,6 +54,12 @@ public class CommentService {
         return CommentResponse.of(savedComment);
     }
 
+    /**
+     * 일정에 달린 댓글 목록을 조회합니다.
+     *
+     * @param scheduleId 일정 ID
+     * @return 댓글 목록
+     */
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentsByScheduleId(Long scheduleId) {
         scheduleRepository.findByIdOrElseThrow(scheduleId);
@@ -51,6 +69,16 @@ public class CommentService {
                 .toList();
     }
 
+    /**
+     * 댓글을 수정합니다.
+     *
+     * @param scheduleId 댓글이 속한 일정 ID
+     * @param commentId 수정할 댓글 ID
+     * @param commentRequest 수정할 댓글 정보
+     * @param sessionUserId 로그인한 사용자 ID
+     * @return 수정된 댓글 정보
+     * @throws ApiException 댓글이 존재하지 않거나 사용자가 소유자가 아닐 경우
+     */
     @Transactional
     public CommentResponse updateComment(Long scheduleId, Long commentId, CommentUpdateRequest commentRequest, Long sessionUserId) {
         Comment comment = commentRepository.findByIdAndScheduleIdOrElseThrow(commentId, scheduleId);
@@ -63,6 +91,14 @@ public class CommentService {
         return CommentResponse.of(updatedComment);
     }
 
+    /**
+     * 댓글을 삭제합니다.
+     *
+     * @param scheduleId 댓글이 속한 일정 ID
+     * @param commentId 삭제할 댓글 ID
+     * @param sessionUserId 로그인한 사용자 ID
+     * @throws ApiException 댓글이 존재하지 않거나 사용자가 소유자가 아닐 경우
+     */
     public void deleteComment(Long scheduleId, Long commentId, Long sessionUserId) {
         Comment comment = commentRepository.findByIdAndScheduleIdOrElseThrow(commentId, scheduleId);
 
